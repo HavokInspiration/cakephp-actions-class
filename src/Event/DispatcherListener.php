@@ -1,6 +1,7 @@
 <?php
 namespace HavokInspiration\ActionsClass\Event;
 
+use Cake\Event\Event;
 use HavokInspiration\ActionsClass\Http\ActionFactory;
 use Cake\Event\EventListenerInterface;
 use Cake\Http\Response;
@@ -19,11 +20,13 @@ class DispatcherListener implements EventListenerInterface
         ];
     }
     
-    public function beforeDispatch($event, ServerRequest $request, Response $response)
+    public function beforeDispatch(Event $event, ServerRequest $request, Response $response)
     {
         $factory = new ActionFactory();
         $action = $factory->create($request, $response);
-        debug($action);
-        die;
+
+        $event->setData('controller', $action);
+
+        return $event;
     }
 }
