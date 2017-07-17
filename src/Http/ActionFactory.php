@@ -53,16 +53,16 @@ class ActionFactory
             strpos($action, '.') !== false ||
             $firstChar === strtolower($firstChar)
         ) {
-            $this->missingAction($request);
+            $this->missingAction($namespace, $action);
         }
 
         $className = App::className($pluginPath . $action, $namespace, 'Action');
         if (!$className) {
-            $this->missingAction($request);
+            $this->missingAction($namespace, $action);
         }
         $reflection = new ReflectionClass($className);
         if ($reflection->isAbstract() || $reflection->isInterface()) {
-            $this->missingAction($request);
+            $this->missingAction($namespace, $action);
         }
 
         return $reflection->newInstance($request, $response, $controller);
@@ -71,17 +71,12 @@ class ActionFactory
     /**
      * Throws an exception when a controller is missing.
      *
-     * @param \Cake\Http\ServerRequest $request The request.
-     * @throws \Cake\Routing\Exception\MissingControllerException
      * @return void
      */
-    protected function missingAction($request)
+    protected function missingAction($namespace, $action)
     {
         throw new MissingActionClassException([
-            'class' => $request->getParam('controller'),
-            'plugin' => $request->getParam('plugin'),
-            'prefix' => $request->getParam('prefix'),
-            '_ext' => $request->getParam('_ext')
+            $namespace . '\\' . $action . 'Action'
         ]);
     }
 }
