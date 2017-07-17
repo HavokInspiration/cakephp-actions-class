@@ -77,6 +77,15 @@ abstract class Action extends Controller
             throw new LogicException('No Request object configured. Cannot invoke action');
         }
 
+        if (!method_exists($this, 'execute')) {
+            throw new LogicException(
+                sprintf(
+                    'Your class `%s` should implement an `execute()` method',
+                    get_class($this)
+                )
+            );
+        }
+
         /* @var callable $callable */
         $callable = [$this, 'execute'];
 
@@ -88,7 +97,7 @@ abstract class Action extends Controller
      *
      * @return void
      */
-    public function setAction()
+    public function setAction($action, ...$args)
     {
     }
 
@@ -97,14 +106,7 @@ abstract class Action extends Controller
      *
      * @return void
      */
-    public function isAction()
+    public function isAction($action)
     {
     }
-
-    /**
-     * Every action class should at least implement this method. This method will be called when the action is resolved.
-     *
-     * @return mixed The resulting response.
-     */
-    abstract function execute(...$params);
 }
