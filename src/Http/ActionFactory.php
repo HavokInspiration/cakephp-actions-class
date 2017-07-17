@@ -1,7 +1,7 @@
 <?php
 namespace HavokInspiration\ActionsClass\Http;
 
-use ActionsClass\Core\Exception\MissingActionClassException;
+use HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException;
 use Cake\Core\App;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest;
