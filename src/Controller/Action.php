@@ -84,9 +84,27 @@ abstract class Action extends Controller
     }
 
     /**
+     * This method should be no-op as an action can not redirect to another action.
+     *
+     * @return void
+     */
+    public function setAction()
+    {
+    }
+
+    /**
+     * This method should be no-op as we already are in an action.
+     *
+     * @return void
+     */
+    public function isAction()
+    {
+    }
+
+    /**
      * Every action class should at least implement this method. This method will be called when the action is resolved.
      *
      * @return mixed The resulting response.
      */
-    abstract function execute();
+    abstract function execute(...$params);
 }
