@@ -65,7 +65,8 @@ class ActionFactory
             $this->missingAction($namespace, $action);
         }
 
-        $instance = $reflection->newInstance($request, $response, $request->getParam('controller') . '\\' . $action);
+        $instance = $reflection->newInstance($request, $response, $action);
+        $instance->setControllerName($request->getParam('controller'));
         return $instance;
     }
 
