@@ -1,0 +1,22 @@
+{
+    "name": "havokinspiration/cakephp-actions-class",
+    "description": "Manage your Controllers actions as single classes in CakePHP",
+    "type": "cakephp-plugin",
+    "require": {
+        "cakephp/cakephp": "^3.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "HavokInspiration\\ActionsClass\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HavokInspiration\\ActionsClass\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
