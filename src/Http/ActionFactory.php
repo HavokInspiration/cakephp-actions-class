@@ -35,19 +35,19 @@ class ActionFactory
         if ($request->getParam('plugin')) {
             $pluginPath = $request->getParam('plugin') . '.';
         }
-        if ($request->getParam('controller')) {
-            $namespace .= '\\' . $request->getParam('controller');
-        }
         if ($request->getParam('prefix')) {
             if (strpos($request->getParam('prefix'), '/') === false) {
-                $namespace .= '/' . Inflector::camelize($request->getParam('prefix'));
+                $namespace .= '\\' . Inflector::camelize($request->getParam('prefix'));
             } else {
                 $prefixes = array_map(
                     'Cake\Utility\Inflector::camelize',
-                    explode('/', $request->getParam('prefix'))
+                    explode('\\', $request->getParam('prefix'))
                 );
-                $namespace .= '/' . implode('/', $prefixes);
+                $namespace .= '\\' . implode('\\', $prefixes);
             }
+        }
+        if ($request->getParam('controller')) {
+            $namespace .= '\\' . $request->getParam('controller');
         }
 
         $action = 'Index';
