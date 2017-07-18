@@ -106,6 +106,9 @@ abstract class Action extends Controller
     /**
      * This method should be no-op as an action can not redirect to another action.
      *
+     * @param string $action The new action to be 'redirected' to.
+     *   Any other parameters passed to this method will be passed as parameters to the new action.
+     * @param array ...$args Arguments passed to the action
      * @return void
      */
     public function setAction($action, ...$args)
@@ -115,6 +118,7 @@ abstract class Action extends Controller
     /**
      * This method should be no-op as we already are in an action.
      *
+     * @param string $action The action to check.
      * @return void
      */
     public function isAction($action)
