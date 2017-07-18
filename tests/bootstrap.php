@@ -1,10 +1,13 @@
 <?php
 /**
- * Test suite bootstrap for ActionsClass.
+ * Copyright (c) Yves Piquel (http://www.havokinspiration.fr)
  *
- * This function is used to find the location of CakePHP whether CakePHP
- * has been installed as a dependency of the plugin, or the plugin is itself
- * installed as a dependency of an application.
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Yves Piquel (http://www.havokinspiration.fr)
+ * @link          http://github.com/HavokInspiration/cakephp-actions-class
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 $findRoot = function ($root) {
     do {
