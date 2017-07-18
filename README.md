@@ -6,14 +6,15 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
 
 ## Roadmap
 
-[x] Serve a simple action  
-[x] Serve an action behind a routing prefix  
-[x] Let the system fallback to CakePHP dispatching cycle in case an Action does not exist  
-[ ] Serve an action behind a nested routing prefix  
-[ ] Serve an action from a plugin
-[ ] Start writing unit tests
-[ ] Write some docs
-[ ] Run a sniffer
+- [x] Serve a simple action  
+- [x] Serve an action behind a routing prefix  
+- [x] Let the system fallback to CakePHP dispatching cycle in case an Action does not exist  
+- [x] Serve an action behind a nested routing prefix  
+- [ ] Serve an action from a plugin
+- [ ] Serve an action from a plugin, behind a (nested) routing prefix    
+- [ ] Start writing unit tests  
+- [ ] Write some docs  
+- [ ] Run a sniffer  
 
 ## License
 
