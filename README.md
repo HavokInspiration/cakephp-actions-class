@@ -16,9 +16,10 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
     - [x] Loading a component in an action
     - [x] Loading two different components in two different action
 - [x] Try working with an "AppAction"
+- [ ] Check that integration tests works with this plugin  
 - [ ] Start writing unit tests  
 - [ ] Write some docs  
-- [ ] Run a sniffer  
+- [x] Run a sniffer  
 
 ## License
 
