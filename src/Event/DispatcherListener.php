@@ -38,13 +38,11 @@ class DispatcherListener implements EventListenerInterface
     {
         $action = null;
 
-        if (Configure::read('ActionsClass.strictMode') === true) {
+        try {
             $action = $this->createActionFactory($request, $response);
-        } else {
-            try {
-                $action = $this->createActionFactory($request, $response);
-            } catch (MissingActionClassException $e) {
-                // Do not do anything, let it fallback to CakePHP default dispatching cycle.
+        } catch (MissingActionClassException $e) {
+            if (Configure::read('ActionsClass.strictMode') === true) {
+                throw $e;
             }
         }
 
