@@ -13,6 +13,7 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
 [ ] Serve an action from a plugin
 [ ] Start writing unit tests
 [ ] Write some docs
+[ ] Run a sniffer
 
 ## License
 
