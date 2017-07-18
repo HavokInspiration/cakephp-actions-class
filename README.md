@@ -10,8 +10,12 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
 - [x] Serve an action behind a routing prefix  
 - [x] Let the system fallback to CakePHP dispatching cycle in case an Action does not exist  
 - [x] Serve an action behind a nested routing prefix  
-- [ ] Serve an action from a plugin
-- [ ] Serve an action from a plugin, behind a (nested) routing prefix    
+- [x] Serve an action from a plugin
+- [x] Serve an action from a plugin, behind a (nested) routing prefix    
+- [ ] Test working with Components
+    - [ ] Loading a component in an action
+    - [ ] Loading two different components in two different action
+- [ ] Try working with an "AppAction"
 - [ ] Start writing unit tests  
 - [ ] Write some docs  
 - [ ] Run a sniffer  
