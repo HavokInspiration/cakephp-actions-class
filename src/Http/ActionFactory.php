@@ -19,14 +19,20 @@ use Cake\Http\ServerRequest;
 use Cake\Utility\Inflector;
 use ReflectionClass;
 
+/**
+ * Class ActionFactory
+ *
+ * In charge of creating the action the Dispatcher will use.
+ */
 class ActionFactory
 {
+
     /**
-     * Create a controller for a given request/response
+     * Create an action for a given request/response
      *
-     * @param \Cake\Http\ServerRequest $request The request to build a controller for.
+     * @param \Cake\Http\ServerRequest $request The request to build an action for.
      * @param \Cake\Http\Response $response The response to use.
-     * @return \Cake\Controller\Controller
+     * @return \HavokInspiration\ActionsClass\Controller\Action
      */
     public function create(ServerRequest $request, Response $response)
     {
@@ -82,7 +88,7 @@ class ActionFactory
     }
 
     /**
-     * Throws an exception when a controller is missing.
+     * Throws an exception when an action is missing.
      *
      * @return void
      */

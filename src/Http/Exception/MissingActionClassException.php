@@ -14,7 +14,12 @@ namespace HavokInspiration\ActionsClass\Http\Exception;
 
 use Cake\Core\Exception\Exception;
 
-class MissingActionClassException  extends Exception
+/**
+ * Class MissingActionClassException
+ *
+ * Thrown when an action can not be found.
+ */
+class MissingActionClassException extends Exception
 {
 
     /**

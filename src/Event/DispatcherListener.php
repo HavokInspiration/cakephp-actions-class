@@ -21,6 +21,12 @@ use Cake\Http\Response;
 use Cake\Http\ServerRequest;
 use HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException;
 
+/**
+ * Class DispatcherListener
+ *
+ * Event listener in charge of creating an Action object when the `Dispatcher.beforeDispatch` event is triggered
+ * by the CakePHP dispatcher.
+ */
 class DispatcherListener implements EventListenerInterface
 {
 
@@ -33,7 +39,15 @@ class DispatcherListener implements EventListenerInterface
             'Dispatcher.beforeDispatch' => 'beforeDispatch'
         ];
     }
-    
+
+    /**
+     * Hook method called when a beforeDispatch event is triggered by the CakePHP Dispatcher.
+     *
+     * @param \Cake\Event\Event $event Instance of the Event being dispatched.
+     * @param \Cake\Http\ServerRequest $request The request to build an action for.
+     * @param \Cake\Http\Response $response The response to use.
+     * @return \Cake\Event\Event
+     */
     public function beforeDispatch(Event $event, ServerRequest $request, Response $response)
     {
         $action = null;
@@ -51,6 +65,15 @@ class DispatcherListener implements EventListenerInterface
         return $event;
     }
 
+    /**
+     * Create the Action object that will be used by the Dispatcher.
+     *
+     * @param \Cake\Http\ServerRequest $request The request to build an action for.
+     * @param \Cake\Http\Response $response The response to use.
+     * @return \HavokInspiration\ActionsClass\Controller\Action
+     * @throws \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException In case the action can not be
+     * found
+     */
     protected function createActionFactory(ServerRequest $request, Response $response) : Action
     {
         $factory = new ActionFactory();
