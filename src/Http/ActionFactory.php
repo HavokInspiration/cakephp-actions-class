@@ -41,7 +41,7 @@ class ActionFactory
             } else {
                 $prefixes = array_map(
                     'Cake\Utility\Inflector::camelize',
-                    explode('\\', $request->getParam('prefix'))
+                    explode('/', $request->getParam('prefix'))
                 );
                 $namespace .= '\\' . implode('\\', $prefixes);
             }
