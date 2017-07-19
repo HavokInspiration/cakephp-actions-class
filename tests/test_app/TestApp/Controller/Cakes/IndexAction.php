@@ -16,7 +16,13 @@ use HavokInspiration\ActionsClass\Controller\Action;
 class IndexAction extends Action
 {
 
+    public $someProperty = null;
+
+    public $viewPath = null;
+
     public function execute()
     {
+        $this->someProperty = 'executed';
+        $this->viewPath = $this->_viewPath();
     }
 }

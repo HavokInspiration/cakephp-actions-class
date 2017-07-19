@@ -9,24 +9,10 @@
  * @link          http://github.com/HavokInspiration/cakephp-actions-class
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace TestApp\Controller\Admin\Sub\Posts;
+namespace TestApp\Controller\Cakes;
 
 use HavokInspiration\ActionsClass\Controller\Action;
 
-class IndexAction extends Action
+class AddAction extends Action
 {
-
-    public $someProperty = null;
-
-    public $viewPath = null;
-
-    public $passed = [];
-
-    public function execute($order, $limit)
-    {
-        $this->someProperty = 'executed';
-        $this->viewPath = $this->_viewPath();
-
-        $this->passed = compact('order', 'limit');
-    }
 }
