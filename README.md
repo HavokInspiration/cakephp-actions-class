@@ -1,5 +1,9 @@
 # CakePHP ActionsClass plugin
 
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://travis-ci.org/HavokInspiration/cakephp-actions-class.svg?branch=master)](https://travis-ci.org/HavokInspiration/wrench)
+[![codecov.io](https://codecov.io/github/HavokInspiration/cakephp-actions-class/coverage.svg?branch=master)](https://codecov.io/github/HavokInspiration/cakephp-actions-class?branch=master)
+
 **This is a plugin in development just created to test if this idea is something viable. Use it at your own risk (including the fact that this repo can be destroyed at any time if I see fit).** 
 
 This plugin gives you the ability to manage your CakePHP Controller actions as single class. Each action of your Controllers will be managed in its own object.
@@ -17,7 +21,7 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
     - [x] Loading two different components in two different action
 - [x] Try working with an "AppAction"
 - [ ] Check that integration tests works with this plugin  
-- [ ] Start writing unit tests  
+- [x] Start writing unit tests  
 - [ ] Write some docs  
 - [x] Run a sniffer  
 
