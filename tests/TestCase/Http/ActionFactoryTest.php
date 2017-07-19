@@ -176,58 +176,58 @@ class ActionFactoryTest extends TestCase
         $this->assertSame($request, $result->request);
         $this->assertSame($this->response, $result->response);
     }
-//
-//    /**
-//     * @expectedException \Cake\Routing\Exception\MissingControllerException
-//     * @expectedExceptionMessage Controller class Abstract could not be found.
-//     * @return void
-//     */
-//    public function testAbstractClassFailure()
-//    {
-//        $request = new ServerRequest([
-//            'url' => 'abstract/index',
-//            'params' => [
-//                'controller' => 'Abstract',
-//                'action' => 'index',
-//            ]
-//        ]);
-//        $this->factory->create($request, $this->response);
-//    }
-//
-//    /**
-//     * @expectedException \Cake\Routing\Exception\MissingControllerException
-//     * @expectedExceptionMessage Controller class Interface could not be found.
-//     * @return void
-//     */
-//    public function testInterfaceFailure()
-//    {
-//        $request = new ServerRequest([
-//            'url' => 'interface/index',
-//            'params' => [
-//                'controller' => 'Interface',
-//                'action' => 'index',
-//            ]
-//        ]);
-//        $this->factory->create($request, $this->response);
-//    }
-//
-//    /**
-//     * @expectedException \Cake\Routing\Exception\MissingControllerException
-//     * @expectedExceptionMessage Controller class Invisible could not be found.
-//     * @return void
-//     */
-//    public function testMissingClassFailure()
-//    {
-//        $request = new ServerRequest([
-//            'url' => 'interface/index',
-//            'params' => [
-//                'controller' => 'Invisible',
-//                'action' => 'index',
-//            ]
-//        ]);
-//        $this->factory->create($request, $this->response);
-//    }
-//
+
+    /**
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\Invalid\AbstractAction could not be found.
+     * @return void
+     */
+    public function testAbstractClassFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'invalid/abstract',
+            'params' => [
+                'controller' => 'Invalid',
+                'action' => 'Abstract',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
+
+    /**
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\Invalid\InterfaceAction could not be found.
+     * @return void
+     */
+    public function testInterfaceFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'invalid/interface',
+            'params' => [
+                'controller' => 'Invalid',
+                'action' => 'Interface',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
+
+    /**
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\Invisible\IndexAction could not be found.
+     * @return void
+     */
+    public function testMissingClassFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'interface/index',
+            'params' => [
+                'controller' => 'Invisible',
+                'action' => 'index',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
+
 //    /**
 //     * @expectedException \Cake\Routing\Exception\MissingControllerException
 //     * @expectedExceptionMessage Controller class Admin/Posts could not be found.
@@ -244,21 +244,21 @@ class ActionFactoryTest extends TestCase
 //        ]);
 //        $this->factory->create($request, $this->response);
 //    }
-//
-//    /**
-//     * @expectedException \Cake\Routing\Exception\MissingControllerException
-//     * @expectedExceptionMessage Controller class TestApp\Controller\CakesController could not be found.
-//     * @return void
-//     */
-//    public function testAbsoluteReferenceFailure()
-//    {
-//        $request = new ServerRequest([
-//            'url' => 'interface/index',
-//            'params' => [
-//                'controller' => 'TestApp\Controller\CakesController',
-//                'action' => 'index',
-//            ]
-//        ]);
-//        $this->factory->create($request, $this->response);
-//    }
+
+    /**
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\TestApp\Controller\CakesController\IndexAction could not be found.
+     * @return void
+     */
+    public function testAbsoluteReferenceFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'interface/index',
+            'params' => [
+                'controller' => 'TestApp\Controller\CakesController',
+                'action' => 'index',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
 }
