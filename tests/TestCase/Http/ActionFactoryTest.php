@@ -52,6 +52,8 @@ class ActionFactoryTest extends TestCase
         ]);
         $result = $this->factory->create($request, $this->response);
         $this->assertInstanceOf('TestApp\Controller\Cakes\IndexAction', $result);
+        $this->assertEquals('Index', $result->name);
+        $this->assertEquals('Cakes', $result->getControllerName());
         $this->assertSame($request, $result->request);
         $this->assertSame($this->response, $result->response);
     }
@@ -76,6 +78,7 @@ class ActionFactoryTest extends TestCase
             'TestApp\Controller\Admin\Posts\IndexAction',
             $result
         );
+        $this->assertEquals('Posts', $result->getControllerName());
         $this->assertSame($request, $result->request);
         $this->assertSame($this->response, $result->response);
     }
@@ -100,6 +103,7 @@ class ActionFactoryTest extends TestCase
             'TestApp\Controller\Admin\Sub\Posts\IndexAction',
             $result
         );
+        $this->assertEquals('Posts', $result->getControllerName());
         $this->assertSame($request, $result->request);
         $this->assertSame($this->response, $result->response);
     }
