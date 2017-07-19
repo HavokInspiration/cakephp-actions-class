@@ -52,26 +52,22 @@ class ActionFactory
                 $namespace .= '\\' . implode('\\', $prefixes);
             }
         }
+
+        $this->failureIfForbiddenCharacters($request->getParam('controller'), $namespace);
+
         if ($request->getParam('controller')) {
             $namespace .= '\\' . $request->getParam('controller');
         }
 
         $action = 'Index';
-        if ($request->getParam('controller')) {
+        if ($request->getParam('action')) {
             $action = Inflector::camelize($request->getParam('action'));
         }
-        $firstChar = substr($action, 0, 1);
 
         // Disallow plugin short forms, / and \\ from
         // controller names as they allow direct references to
         // be created.
-        if (strpos($action, '\\') !== false ||
-            strpos($action, '/') !== false ||
-            strpos($action, '.') !== false ||
-            $firstChar === strtolower($firstChar)
-        ) {
-            $this->missingAction($namespace, $action);
-        }
+        $this->failureIfForbiddenCharacters($action, $namespace);
 
         $className = App::className($pluginPath . $action, $namespace, 'Action');
         if (!$className) {
@@ -97,5 +93,19 @@ class ActionFactory
         throw new MissingActionClassException([
             $namespace . '\\' . $action . 'Action'
         ]);
+    }
+
+    protected function failureIfForbiddenCharacters($name, $namespace)
+    {
+        if (is_string($name) &&
+            (
+                strpos($name, '\\') !== false ||
+                strpos($name, '/') !== false ||
+                strpos($name, '.') !== false ||
+                substr($name, 0, 1) === strtolower(substr($name, 0, 1))
+            )
+        ) {
+            $this->missingAction($namespace, $name);
+        }
     }
 }
