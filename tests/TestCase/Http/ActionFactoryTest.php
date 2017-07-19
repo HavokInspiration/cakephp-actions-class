@@ -37,11 +37,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building an application controller
+     * Test building an application action
      *
      * @return void
      */
-    public function testApplicationController()
+    public function testApplicationAction()
     {
         $request = new ServerRequest([
             'url' => 'cakes/index',
@@ -57,11 +57,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building a prefixed app controller.
+     * Test building a prefixed app action.
      *
      * @return void
      */
-    public function testPrefixedAppController()
+    public function testPrefixedAppAction()
     {
         $request = new ServerRequest([
             'url' => 'admin/posts/index',
@@ -81,11 +81,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building a nested prefix app controller
+     * Test building a nested prefix app action
      *
      * @return void
      */
-    public function testNestedPrefixedAppController()
+    public function testNestedPrefixedAppAction()
     {
         $request = new ServerRequest([
             'url' => 'admin/sub/posts/index',
@@ -105,11 +105,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building a plugin controller
+     * Test building a plugin action
      *
      * @return void
      */
-    public function testPluginController()
+    public function testPluginAction()
     {
         $request = new ServerRequest([
             'url' => 'test_plugin/test_plugin/index',
@@ -129,11 +129,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building a vendored plugin controller.
+     * Test building a vendored plugin action.
      *
      * @return void
      */
-    public function testVendorPluginController()
+    public function testVendorPluginAction()
     {
         $request = new ServerRequest([
             'url' => 'test_plugin_three/ovens/index',
@@ -153,11 +153,11 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * Test building a prefixed plugin controller
+     * Test building a prefixed plugin action
      *
      * @return void
      */
-    public function testPrefixedPluginController()
+    public function testPrefixedPluginAction()
     {
         $request = new ServerRequest([
             'url' => 'test_plugin/admin/comments',
@@ -178,6 +178,8 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
+     * Test that trying to load an existing action that is abstract will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\Invalid\AbstractAction could not be found.
      * @return void
@@ -195,6 +197,8 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
+     * Test that trying to load an existing action that is an interface will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\Invalid\InterfaceAction could not be found.
      * @return void
@@ -212,6 +216,8 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
+     * That that trying to load a missing class will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\Invisible\IndexAction could not be found.
      * @return void
@@ -229,6 +235,8 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
+     * Test that having a slash in the controller name will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\Admin/PostsAction could not be found.
      * @return void
@@ -246,6 +254,8 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
+     * Test that trying to load an absolute namespace path in the controller will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\TestApp\Controller\Cakes\IndexAction could not be found.
      * @return void
@@ -263,6 +273,8 @@ class ActionFactoryTest extends TestCase
     }
     
     /**
+     * Test that trying to load an absolute namespace path in the action will throw an exception.
+     *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      * @expectedExceptionMessage Action class Controller\Admin\Posts\IndexAction could not be found.
      * @return void
