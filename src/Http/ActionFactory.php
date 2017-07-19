@@ -59,6 +59,7 @@ class ActionFactory
             $namespace .= '\\' . $request->getParam('controller');
         }
 
+        $action = 'Index';
         if ($request->getParam('action')) {
             $action = Inflector::camelize($request->getParam('action'));
         }
