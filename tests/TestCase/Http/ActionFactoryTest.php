@@ -247,7 +247,7 @@ class ActionFactoryTest extends TestCase
 
     /**
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
-     * @expectedExceptionMessage Action class Controller\TestApp\Controller\CakesController\IndexAction could not be found.
+     * @expectedExceptionMessage Action class Controller\TestApp\Controller\Cakes\IndexAction could not be found.
      * @return void
      */
     public function testAbsoluteReferenceFailure()
@@ -255,8 +255,25 @@ class ActionFactoryTest extends TestCase
         $request = new ServerRequest([
             'url' => 'interface/index',
             'params' => [
-                'controller' => 'TestApp\Controller\CakesController',
+                'controller' => 'TestApp\Controller\Cakes',
                 'action' => 'index',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
+    
+    /**
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\Admin\Posts\IndexAction could not be found.
+     * @return void
+     */
+    public function testAbsoluteReferenceInActionFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'interface/index',
+            'params' => [
+                'controller' => 'Admin',
+                'action' => 'Posts\Index',
             ]
         ]);
         $this->factory->create($request, $this->response);

@@ -73,20 +73,6 @@ class ActionFactory
             $this->missingAction($namespace, $action);
         }
 
-        // Disallow plugin short forms, / and \\ from
-        // controller names as they allow direct references to
-        // be created.
-        if (is_string($controller) &&
-            (
-                strpos($controller, '\\') !== false ||
-                strpos($controller, '/') !== false ||
-                strpos($controller, '.') !== false ||
-                $firstChar === strtolower($firstChar)
-            )
-        ) {
-            $this->missingAction($namespace, $action);
-        }
-
         $className = App::className($pluginPath . $action, $namespace, 'Action');
         if (!$className) {
             $this->missingAction($namespace, $action);
