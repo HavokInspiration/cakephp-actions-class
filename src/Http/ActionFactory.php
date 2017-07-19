@@ -52,20 +52,22 @@ class ActionFactory
                 $namespace .= '\\' . implode('\\', $prefixes);
             }
         }
+
+        $this->failureIfForbiddenCharacters($request->getParam('controller'), $namespace);
+
         if ($request->getParam('controller')) {
             $namespace .= '\\' . $request->getParam('controller');
         }
 
         $action = 'Index';
-        if ($request->getParam('controller')) {
+        if ($request->getParam('action')) {
             $action = Inflector::camelize($request->getParam('action'));
         }
 
         // Disallow plugin short forms, / and \\ from
         // controller names as they allow direct references to
         // be created.
-        $this->checkForbiddenCharacters($action, $namespace);
-        $this->checkForbiddenCharacters($controller, $namespace);
+        $this->failureIfForbiddenCharacters($action, $namespace);
 
         $className = App::className($pluginPath . $action, $namespace, 'Action');
         if (!$className) {
@@ -93,8 +95,9 @@ class ActionFactory
         ]);
     }
 
-    protected function checkForbiddenCharacters($name, $namespace)
+    protected function failureIfForbiddenCharacters($name, $namespace)
     {
+        var_dump($name);
         if (is_string($name) &&
             (
                 strpos($name, '\\') !== false ||

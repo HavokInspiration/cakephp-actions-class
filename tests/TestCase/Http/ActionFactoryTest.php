@@ -229,21 +229,21 @@ class ActionFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Cake\Routing\Exception\MissingControllerException
-     * @expectedExceptionMessage Controller class Admin/Posts could not be found.
+     * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     * @expectedExceptionMessage Action class Controller\Admin/PostsAction could not be found.
      * @return void
      */
-//    public function testSlashedControllerFailure()
-//    {
-//        $request = new ServerRequest([
-//            'url' => 'admin/posts/index',
-//            'params' => [
-//                'controller' => 'Admin/Posts',
-//                'action' => 'index',
-//            ]
-//        ]);
-//        $this->factory->create($request, $this->response);
-//    }
+    public function testSlashedControllerFailure()
+    {
+        $request = new ServerRequest([
+            'url' => 'admin/posts/index',
+            'params' => [
+                'controller' => 'Admin/Posts',
+                'action' => 'index',
+            ]
+        ]);
+        $this->factory->create($request, $this->response);
+    }
 
     /**
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
