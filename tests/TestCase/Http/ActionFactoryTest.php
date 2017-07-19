@@ -228,11 +228,11 @@ class ActionFactoryTest extends TestCase
         $this->factory->create($request, $this->response);
     }
 
-//    /**
-//     * @expectedException \Cake\Routing\Exception\MissingControllerException
-//     * @expectedExceptionMessage Controller class Admin/Posts could not be found.
-//     * @return void
-//     */
+    /**
+     * @expectedException \Cake\Routing\Exception\MissingControllerException
+     * @expectedExceptionMessage Controller class Admin/Posts could not be found.
+     * @return void
+     */
 //    public function testSlashedControllerFailure()
 //    {
 //        $request = new ServerRequest([
