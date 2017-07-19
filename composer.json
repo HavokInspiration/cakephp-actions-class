@@ -2,6 +2,13 @@
     "name": "havokinspiration/cakephp-actions-class",
     "description": "Manage your Controllers actions as single classes in CakePHP",
     "type": "cakephp-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yves P.",
+            "email": "havokinspiration@gmail.com"
+        }
+    ],
     "require": {
         "php": ">=7.0.0",
         "cakephp/cakephp": "^3.4"
