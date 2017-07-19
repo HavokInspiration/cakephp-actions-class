@@ -257,7 +257,7 @@ class ActionFactoryTest extends TestCase
      * Test that trying to load an absolute namespace path in the controller will throw an exception.
      *
      * @expectedException \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
-     * @expectedExceptionMessage Action class Controller\TestApp\Controller\Cakes\IndexAction could not be found.
+     * @expectedExceptionMessage Action class Controller\TestApp\Controller\CakesAction could not be found.
      * @return void
      */
     public function testAbsoluteReferenceFailure()
