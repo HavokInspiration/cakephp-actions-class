@@ -172,6 +172,10 @@ class EditAction extends Action
 }
 ```
 
+### No-op methods
+
+As seen above, `Action` classes are instance of `\Cake\Controller\Controller`. Some methods in this class are related to actions. But since we are now having objects that represent actions, two methods had to be made "no-op" : `\Cake\Controller\Controller::isAction()` and `\Cake\Controller\Controller::setAction()`. Using these methods in an `Action` subclass will have no effect.  
+
 ## Configuration
 
 ### Strict Mode
@@ -208,7 +212,7 @@ If you would like to submit a fix or a feature, please fork the repository and [
 
 ### Coding standards
 
-This repository follows the PSR-2 standard. Some methods might be prefixed with an underscore because they are an overload from existing methods inside the CakePHP framework. 
+This repository follows the PSR-2 standard. Some methods might be prefixed with an underscore because they are an overload from existing methods inside the CakePHP framework.  
 Coding standards are checked when a pull request is made using the [Stickler CI](https://stickler-ci.com/) bot. 
 
 ## License
