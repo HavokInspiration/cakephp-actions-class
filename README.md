@@ -17,7 +17,7 @@ _* It might work on lesser versions, but I did not test it (and do not plan to).
 
 ## Installation
 
-You can install this plugin into your CakePHP application using composer.
+You can install this plugin into your CakePHP application using [Composer](https://getcomposer.org).
 
 The recommended way to install composer packages is:
 
@@ -60,13 +60,13 @@ class PostsController extends Controller
 }
 ```
 
-As your application grows, your controller grows as well. In the end, on large application, you can end up with one big controller file with lots of content, making it hard to read through. You might even be in the case where you need to have methods specific to some actions in the middle of other methods dedicated to other actions.
+As your application grows, your controllers grow as well. In the end, on large application, you can end up with big controller files with lots of content, making it hard to read through. You might even be in the case where you need to have methods specific to some actions in the middle of other methods dedicated to other actions.
 
 This is where the **cakephp-actions-class** plugin is useful. When enabled, **you can have your controllers actions as single class**.
 
 So the `PostsController` example given above would become:
  
-```
+```php
 // in src/Controller/Posts/IndexAction.php
 namespace App\Controller\Posts;
 
@@ -78,7 +78,7 @@ class IndexAction extends Action
 }
 ```
 
-```
+```php
 // in src/Controller/Posts/AddAction.php
 namespace App\Controller\Posts;
 
@@ -90,7 +90,7 @@ class AddAction extends Action
 }
 ```
 
-```
+```php
 // in src/Controller/Posts/EditAction.php
 namespace App\Controller\Posts;
 
@@ -131,7 +131,7 @@ Under the hood, `Action` classes instances of a `Controller` object, meaning tha
  
 #### Loading Components
 
-```
+```php
 // in src/Controller/Posts/EditAction.php
 namespace App\Controller\Posts;
 
