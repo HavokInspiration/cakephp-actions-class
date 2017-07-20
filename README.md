@@ -4,9 +4,9 @@
 [![Build Status](https://travis-ci.org/HavokInspiration/cakephp-actions-class.svg?branch=master)](https://travis-ci.org/HavokInspiration/wrench)
 [![codecov.io](https://codecov.io/github/HavokInspiration/cakephp-actions-class/coverage.svg?branch=master)](https://codecov.io/github/HavokInspiration/cakephp-actions-class?branch=master)
 
-**This is a plugin in development just created to test if this idea is something viable. Use it at your own risk (including the fact that this repo can be destroyed at any time if I see fit).** 
+**This is a plugin in development. Use it at your own risk.** 
 
-This plugin gives you the ability to manage your CakePHP Controller actions as single class. Each action of your Controllers will be managed in its own object.
+This plugin gives you the ability to manage your CakePHP Controller actions as single classes. Each action of your Controllers will be managed in its own object.
 
 ## Requirements
 
@@ -19,7 +19,7 @@ _* It might work on lesser versions, but I did not test it (and do not plan to).
 
 You can install this plugin into your CakePHP application using [Composer](https://getcomposer.org).
 
-The recommended way to install composer packages is:
+The recommended way to install it is:
 
 ```
 composer require havokinspiration/cakephp-actions-class
@@ -33,7 +33,7 @@ You can load the plugin using the shell command:
 bin/cake plugin load HavokInspiration/ActionsClass --bootstrap
 ```
 
-Or you can manually add the loading statement in the boostrap.php file of your application:
+Or you can manually add the loading statement in the **bootstrap.php** file of your application:
 
 ```php
 Plugin::load('HavokInspiration/ActionsClass', ['bootstrap' => true]);
@@ -43,7 +43,7 @@ Plugin::load('HavokInspiration/ActionsClass', ['bootstrap' => true]);
 
 ## Usage
 
-By default, CakePHP controller management is based around one controller (which represents one part of your application, for instance "Posts") which is a single class containing one public method per action needed to be exposed in your application:
+By default, CakePHP controller management is based around one controller (which represents one part of your application, for instance "Posts") which is a single class containing one public method per actions needed to be exposed in your application:
 
 ```php
 // in src/Controller/PostsController.php
@@ -60,9 +60,9 @@ class PostsController extends Controller
 }
 ```
 
-As your application grows, your controllers grow as well. In the end, on large application, you can end up with big controller files with lots of content, making it hard to read through. You might even be in the case where you need to have methods specific to some actions in the middle of other methods dedicated to other actions.
+As your application grows, your controllers grow as well. In the end, on large applications, you can end up with big controller files with lots of content, making it hard to read through. You might even be in the case where you need to have methods specific to some actions in the middle of other methods dedicated to other actions.
 
-This is where the **cakephp-actions-class** plugin is useful. When enabled, **you can have your controllers actions as single class**.
+This is where the **cakephp-actions-class** plugin is useful. When enabled, **you can have your controllers actions as single classes**.
 
 So the `PostsController` example given above would become:
  
@@ -113,21 +113,21 @@ src/
       IndexAction.php
 ```
 
-Your `Action` class are only expected to hold an `execute()` method. It can hold any passed parameters as in regular controller actions. Meaning the URL `/posts/edit/5` will pass `$id` as `5` in the `execute()` method of the `EditAction` class in our previous example.
+Your `Action` classes are only expected to hold an `execute()` method. It can receive passed parameters as in regular controller actions (meaning the URL `/posts/edit/5` will pass `5` to the argument `$id` in the `execute()` method of the `EditAction` class in our previous example).
 
 ## Compatibility
 
-This plugin was designed to have a maximum compatibility with CakePHP behavior.
+This plugin was designed to have a maximum compatibility with the regular CakePHP behavior.
 
 ### Fallback to CakePHP regular behavior
 
-If you wish to use this plugin in an already built application, this plugin will first try to provide a response using an `Action` class. If an action class matching the routing parameters can not be found, it will let CakePHP fallback to its regular behavior (meaning looking for a `Controller` class).
+If you wish to use this plugin in an existing application, it will first try to provide a response using an `Action` class. If an action class matching the routing parameters can not be found, it will let CakePHP fallback to its regular behavior (meaning looking for a `Controller` class).
 
-This also means that you can develop a plugin with controllers implementing this behavior without breaking the base application (since, when the **cakephp-actions-class** plugin is loaded, the Dispatcher will first try to load an Action class).
+This also means that you can develop a plugin with controllers implementing this behavior without breaking the base application (since, when the **cakephp-actions-class** plugin is loaded, the Dispatcher will first try to load an `Action` class and fallback to the regular `Controller` dispatching behavior if it can not find a proper `Action` class to load).
 
 ### Everything you do in Controller can be done in an Action class
 
-Under the hood, `Action` classes instances of a `Controller` object, meaning that **everything you do in a regular `Controller` class can be done in an `Action` class**. 
+Under the hood, `Action` classes are instances of `\Cake\Controller\Controller`, meaning that **everything you do in a regular `Controller` class can be done in an `Action` class**. 
  
 #### Loading Components
 
@@ -154,13 +154,35 @@ class EditAction extends Action
 
 #### Actions in Controllers under a routing prefix
 
-TODO
+`Action` classes can live under a routing prefix or a plugin :
+
+```php
+// in src/Controller/Posts/EditAction.php
+
+// Assuming that `Admin` is a routing prefix
+namespace App\Controller\Admin\Posts;
+
+use HavokInspiration\ActionsClass\Controller\Action;
+
+class EditAction extends Action 
+{    
+    public function execute($id)
+    {
+    }
+}
+```
 
 ## Configuration
 
 ### Strict Mode
 
-TODO
+As seen above, the plugin will let CakePHP handle the request in its regular dispatching cycle if an action can not be found. However, if you wish to only use `Action` classes, you can enable the strict mode. With strict mode enabled, the plugin will throw an exception if it can not find an `Action` class matching the request currently being resolved.
+ 
+To enable the strict mode, set it using the `Configure` object in the **bootstrap.php** file of your application:
+
+```php
+Configure::write('ActionsClass.strictMode', true);
+```
 
 ## Roadmap
 
@@ -187,6 +209,7 @@ If you would like to submit a fix or a feature, please fork the repository and [
 ### Coding standards
 
 This repository follows the PSR-2 standard. Some methods might be prefixed with an underscore because they are an overload from existing methods inside the CakePHP framework. 
+Coding standards are checked when a pull request is made using the [Stickler CI](https://stickler-ci.com/) bot. 
 
 ## License
 
