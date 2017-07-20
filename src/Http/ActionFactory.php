@@ -86,16 +86,28 @@ class ActionFactory
     /**
      * Throws an exception when an action is missing.
      *
+     * @param string $namespace Namespace where the action was looked for
+     * @param string $action Name of the action looked for
      * @return void
+     * @throws \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
      */
-    protected function missingAction($namespace, $action)
+    protected function missingAction(string $namespace, string $action)
     {
         throw new MissingActionClassException([
             $namespace . '\\' . $action . 'Action'
         ]);
     }
 
-    protected function failureIfForbiddenCharacters($name, $namespace)
+    /**
+     * Checks an entity's name (an action or a controller) for forbidden characters. If some are find, an exception
+     * will be thrown.
+     *
+     * @param string $name Name of the entity being checked
+     * @param string $namespace Namespace where the `$name` argument should belong to.
+     * @return void
+     * @throws \HavokInspiration\ActionsClass\Http\Exception\MissingActionClassException
+     */
+    protected function failureIfForbiddenCharacters(string $name, string $namespace)
     {
         if (is_string($name) &&
             (
