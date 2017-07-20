@@ -27,16 +27,24 @@ composer require havokinspiration/cakephp-actions-class
 
 ## Loading the plugin
 
-You can load the plugin using the shell command:
-
-```
-bin/cake plugin load HavokInspiration/ActionsClass --bootstrap
-```
-
-Or you can manually add the loading statement in the **bootstrap.php** file of your application:
+It is recommanded to load this plugin using the `bootstrap()` method of your application's `Application` class. This is needed if you want to be able to use [Integration testing](https://book.cakephp.org/3.0/en/development/testing.html#controller-integration-testing): 
 
 ```php
-Plugin::load('HavokInspiration/ActionsClass', ['bootstrap' => true]);
+// in src/Application.php
+namespace App;
+
+use Cake\Core\Plugin;
+use Cake\Http\BaseApplication;
+
+class Application extends BaseApplication
+{
+    public function bootstrap()
+    {
+        parent::bootstrap();
+
+        Plugin::load('HavokInspiration/ActionsClass', ['bootstrap' => true]);
+    }
+}
 ```
 
 **Loading the plugin bootstrap file is mandatory.**
@@ -171,6 +179,39 @@ class EditAction extends Action
     }
 }
 ```
+
+### Integration testing
+
+The plugin is compatible with the [Integration testing](https://book.cakephp.org/3.0/en/development/testing.html#controller-integration-testing) feature of CakePHP.
+You just need to follow the same directory pattern as you'd do for you application:
+
+```
+tests
+  /TestCase
+    /Controller
+      /Posts
+        /IndexActionTest.php
+```
+
+And a basic test file would look like:
+
+```php
+// in tests/TestCase/Controller/Posts/IndexActionTest.php
+namespace App\Test\TestCase\Controller;
+
+use Cake\TestSuite\IntegrationTestCase;
+
+class IndexActionTest extends IntegrationTestCase
+{
+    public function testIndexAction()
+    {
+        $this->get('/posts');
+        $this->assertResponseOk();
+    }
+}
+```
+
+Make sure you load the plugin in the `App\Application::bootstrap()` method, otherwise, Integration tests will not work. See the "Loading the plugin" section of this README to know how to.
 
 ### No-op methods
 
