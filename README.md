@@ -9,9 +9,7 @@ This plugin gives you the ability to manage your CakePHP Controller actions as s
 ## Requirements
 
 - PHP >= 7.0.0
-- CakePHP 3.4.X *
-
-_* It might work on lesser versions, but I did not test it (and do not plan to)._
+- CakePHP 3.4.X
 
 ## Installation
 
