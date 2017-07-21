@@ -1,7 +1,7 @@
 # CakePHP ActionsClass plugin
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
-[![Build Status](https://travis-ci.org/HavokInspiration/cakephp-actions-class.svg?branch=master)](https://travis-ci.org/HavokInspiration/wrench)
+[![Build Status](https://travis-ci.org/HavokInspiration/cakephp-actions-class.svg?branch=master)](https://travis-ci.org/HavokInspiration/cakephp-actions-class)
 [![codecov.io](https://codecov.io/github/HavokInspiration/cakephp-actions-class/coverage.svg?branch=master)](https://codecov.io/github/HavokInspiration/cakephp-actions-class?branch=master)
 
 This plugin gives you the ability to manage your CakePHP Controller actions as single classes. Each action of your Controllers will be managed in its own object.
