@@ -131,7 +131,8 @@ This also means that you can develop a plugin with controllers implementing this
 
 ### Everything you do in Controller can be done in an Action class
 
-Under the hood, `Action` classes are instances of `\Cake\Controller\Controller`, meaning that **everything you do in a regular `Controller` class can be done in an `Action` class**. 
+Under the hood, `Action` classes are instances of `\Cake\Controller\Controller`, meaning that **everything you do in a regular `Controller` class can be done in an `Action` class**.  
+Every events (like `beforeFilter` or `beforeRender`) a controller fires are also fired by `Action` classes.
  
 #### Loading Components
 
