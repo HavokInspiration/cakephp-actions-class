@@ -177,6 +177,26 @@ class EditAction extends Action
 }
 ```
 
+#### Using shell to create actions-class ingredients
+
+You have to activate plugin in `config/bootstrap_cli.php` with adding `Plugin::load('HavokInspiration/ActionsClass');`
+
+```
+php bin/cake.php HavokInspiration/ActionsClass.action
+```
+
+Differents options are available:
+* --controller or -c : it's the name of directory (eg: src/Controller/{CONTROLLER_NAME}/EditAction.php)
+* --action or -a : it's the name of action file (eg: src/Controller/{CONTROLLER_NAME}/{ACTION_NAME}Action.php)
+* --prefix : use the prefix CakePHP convention
+* --plugin : use the plugin CakePHP convention
+
+So, we can write
+
+```
+php bin/cake.php HavokInspiration/ActionsClass.action -c controller_name -a action_name
+```
+
 ### Integration testing
 
 The plugin is compatible with the [Integration testing](https://book.cakephp.org/3.0/en/development/testing.html#controller-integration-testing) feature of CakePHP.
