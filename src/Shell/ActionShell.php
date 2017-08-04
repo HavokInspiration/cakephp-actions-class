@@ -62,30 +62,43 @@ class ActionShell extends Shell
 
         $directory = APP;
         $data['{{namespace}}'] = 'App';
+
+        // Go to the plugin directory
         if ($this->param('plugin')) {
             $data['{{namespace}}'] = $this->_camelize($this->param('plugin'));
             $directory = ROOT . DS . 'plugins' . DS . $data['{{namespace}}'] . 'src' . DS;
         }
+
+        // It's always in Controller directory
         $directory .=  'Controller' . DS;
 
+        // Add prefix name and directory
         if ($this->param('prefix')) {
-            $data['{{namespace}}'] .= '\\' . $this->_camelize($this->param('prefix'));
-            $directory .= $this->_camelize($this->param('prefix')) . DS;
+            $prefixname .= '\\' . $this->_camelize($this->param('prefix'));
+            $data['{{namespace}}'] = $prefixname;
+            $directory .= $prefixname . DS;
         }
 
+        // Controller name use CakePHP Convention
         $controllerName = $this->_camelize($this->param('controller'));
         $data['{{controller}}'] = $controllerName;
         
+        // Find and create folder
         $folder = new Folder($directory . $controllerName, true);
 
+        // Index is the default action if -a is not define
         $data['{{name}}'] = 'Index';
-        if ($this->param('action'))
-            $data['{{name}}'] = $this->_camelize($this->param('action'));
+        if ($this->param('action')) {
+            $actionName = $this->_camelize($this->param('action'));
+            $data['{{name}}'] = $actionName;
+        }
 
+        // The action Template available on HavokInspiration/cakephp-actions-class plugin
         $templateFile = dirname(__DIR__) . DS . 'Template' . DS . 'Bake' . DS . 'Action' . DS . 'action.ctp';
         $file = new File($templateFile);
-        $contents = str_replace(array_keys($data), $data, $file->read());
+        // Assign data
+        $contents = str_replace(array_keys($data), array_values($data), $file->read());
 
-        $this->createFile($folder->pwd() . DS . $data['{{name}}'] . 'Action.php', $contents);
+        $this->createFile($folder->pwd() . DS . $actionName . 'Action.php', $contents);
     }
 }

@@ -119,6 +119,26 @@ src/
 
 Your `Action` classes are only expected to hold an `execute()` method. It can receive passed parameters as in regular controller actions (meaning the URL `/posts/edit/5` will pass `5` to the argument `$id` in the `execute()` method of the `EditAction` class in our previous example).
 
+#### Using shell to create actions-class ingredients
+
+You have to activate plugin in `config/bootstrap_cli.php` with adding `Plugin::load('HavokInspiration/ActionsClass');`
+
+```
+php bin/cake.php HavokInspiration/ActionsClass.action
+```
+
+Differents options are available:
+* --controller or -c : it's the name of directory (eg: src/Controller/{CONTROLLER_NAME}/EditAction.php)
+* --action or -a : it's the name of action file (eg: src/Controller/{CONTROLLER_NAME}/{ACTION_NAME}Action.php)
+* --prefix : use the prefix CakePHP convention
+* --plugin : use the plugin CakePHP convention
+
+So, we can write
+
+```
+php bin/cake.php HavokInspiration/ActionsClass.action -c controller_name -a action_name
+```
+
 ## Compatibility
 
 This plugin was designed to have a maximum compatibility with the regular CakePHP behavior.
@@ -175,26 +195,6 @@ class EditAction extends Action
     {
     }
 }
-```
-
-#### Using shell to create actions-class ingredients
-
-You have to activate plugin in `config/bootstrap_cli.php` with adding `Plugin::load('HavokInspiration/ActionsClass');`
-
-```
-php bin/cake.php HavokInspiration/ActionsClass.action
-```
-
-Differents options are available:
-* --controller or -c : it's the name of directory (eg: src/Controller/{CONTROLLER_NAME}/EditAction.php)
-* --action or -a : it's the name of action file (eg: src/Controller/{CONTROLLER_NAME}/{ACTION_NAME}Action.php)
-* --prefix : use the prefix CakePHP convention
-* --plugin : use the plugin CakePHP convention
-
-So, we can write
-
-```
-php bin/cake.php HavokInspiration/ActionsClass.action -c controller_name -a action_name
 ```
 
 ### Integration testing
