@@ -4,10 +4,8 @@ namespace HavokInspiration\ActionsClass\Shell;
 
 use Cake\Console\Shell;
 use Cake\Core\ConventionsTrait;
-use Cake\Database\Exception;
-use Cake\Filesystem\Folder;
 use Cake\Filesystem\File;
-use Cake\Utility\Inflector;
+use Cake\Utility\Text;
 
 /**
  * Fixtures shell command.
@@ -15,6 +13,16 @@ use Cake\Utility\Inflector;
 class ActionShell extends Shell
 {
     use ConventionsTrait;
+
+    /**
+     * @var string
+     */
+    protected $templateFile = '';
+
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * Manage the available sub-commands along with their arguments and help
@@ -50,7 +58,7 @@ class ActionShell extends Shell
     /**
      * main() method.
      *
-     * @return bool|int Success or error code.
+     * @return bool Success or not.
      */
     public function main()
     {
@@ -60,45 +68,98 @@ class ActionShell extends Shell
             return false;
         }
 
+        // The action Template available on HavokInspiration/cakephp-actions-class plugin
+        $this->templateFile = dirname(__DIR__) . DS . 'Template' . DS . 'Bake' . DS;
+
+        // Controller name use CakePHP Convention
+        $controllerName = $this->_inflected($this->param('controller'));
+        if (empty($controllerName)) {
+            $this->out('<error>The controller name is empty.</error>');
+            $this->out('<info>Respect the CakePHP convention.</info>');
+
+            return false;
+        }
+        $this->data['{{controller}}'] = $controllerName;
+        $this->data['{{controller.lower}}'] = strtolower($controllerName);
+
         $directory = APP;
-        $data['{{namespace}}'] = 'App';
+        $nameSpace = 'App';
 
         // Go to the plugin directory
         if ($this->param('plugin')) {
-            $data['{{namespace}}'] = $this->_camelize($this->param('plugin'));
-            $directory = ROOT . DS . 'plugins' . DS . $data['{{namespace}}'] . 'src' . DS;
+            $pluginName = $this->_inflected($this->param('plugin'));
+            if (!empty($pluginName)) {
+                $nameSpace = $pluginName;
+                $directory = ROOT . DS . 'plugins' . DS . $pluginName . DS . 'src' . DS;
+            }
         }
 
         // It's always in Controller directory
-        $directory .=  'Controller' . DS;
+        $directory .= 'Controller' . DS;
 
         // Add prefix name and directory
         if ($this->param('prefix')) {
-            $prefixname .= '\\' . $this->_camelize($this->param('prefix'));
-            $data['{{namespace}}'] = $prefixname;
-            $directory .= $prefixname . DS;
+            $prefixname = $this->_inflected($this->param('prefix'));
+            if (!empty($prefixname)) {
+                $nameSpace .= '\\' . $prefixname;
+                $directory .= $prefixname . DS;
+            }
         }
-
-        // Controller name use CakePHP Convention
-        $controllerName = $this->_camelize($this->param('controller'));
-        $data['{{controller}}'] = $controllerName;
-        
-        // Find and create folder
-        $folder = new Folder($directory . $controllerName, true);
 
         // Index is the default action if -a is not define
-        $data['{{name}}'] = 'Index';
         if ($this->param('action')) {
-            $actionName = $this->_camelize($this->param('action'));
-            $data['{{name}}'] = $actionName;
+            $actionName = $this->_inflected($this->param('action'));
         }
+        if (empty($actionName)) {
+            $actionName = 'Index';
+        }
+        $this->data['{{name}}'] = $actionName;
 
-        // The action Template available on HavokInspiration/cakephp-actions-class plugin
-        $templateFile = dirname(__DIR__) . DS . 'Template' . DS . 'Bake' . DS . 'Action' . DS . 'action.ctp';
-        $file = new File($templateFile);
+        $this->data['{{namespace}}'] = $nameSpace;
+
+        $this->_createActionFile($directory);
+        $this->_createTestFile();
+
+        return true;
+    }
+
+    /**
+     * Create Controller Action file
+     *
+     * @param string $directory The directory to controller
+     */
+    protected function _createActionFile($directory)
+    {
+        $file = new File($this->templateFile . 'Action' . DS . 'action.ctp');
         // Assign data
-        $contents = str_replace(array_keys($data), array_values($data), $file->read());
+        $contents = str_replace(array_keys($this->data), array_values($this->data), $file->read());
 
-        $this->createFile($folder->pwd() . DS . $actionName . 'Action.php', $contents);
+        $this->createFile($directory . $this->data['{{controller}}'] . DS . $this->data['{{name}}'] . 'Action.php', $contents);
+    }
+
+    /**
+     * Create TestCase file
+     */
+    protected function _createTestFile()
+    {
+        $file = new File($this->templateFile . 'Tests' . DS . 'action.ctp');
+        // Assign data
+        $contents = str_replace(array_keys($this->data), array_values($this->data), $file->read());
+
+        $this->createFile(TESTS . 'TestCase' . DS . $this->data['{{controller}}'] . DS . $this->data['{{name}}'] . 'Action.php', $contents);
+    }
+
+    /**
+     * Correct string with Text::slug and use CakePHP convention
+     *
+     * @param string $string
+     * @see https://book.cakephp.org/3.0/en/core-libraries/text.html#Cake\Utility\Text::slug
+     * @see https://book.cakephp.org/3.0/en/intro/conventions.html
+     *
+     * @return string The string after Text::slug and 
+     */
+    protected function _inflected($string)
+    {
+        return $this->_camelize(Text::slug($string, ['replacement' => '_']));
     }
 }

@@ -8,9 +8,9 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-namespace {{namespace}}\Controller\{{controller}};
+namespace App\Test\TestCase\Controller;
 
-use HavokInspiration\ActionsClass\Controller\Action;
+use Cake\TestSuite\IntegrationTestCase;
 
 /**
  * {{controller}} Controller
@@ -18,13 +18,14 @@ use HavokInspiration\ActionsClass\Controller\Action;
  *
  * @package {{namespace}}\Controller
  */
-class {{name}}Action extends Action
+class {{name}}ActionTest extends IntegrationTestCase
 {
 	/**
-	 * It's like {{controller}}Controller::{{name}} method
+	 * TestCase for \{{namespace}}\Controller\{{controller}}\{{name}}Action
 	 */
-	public function execute()
-	{
-
-	}
+    public function test{{name}}Action()
+    {
+        $this->get('/{{controller.lower}}');
+        $this->assertResponseOk();
+    }
 }
