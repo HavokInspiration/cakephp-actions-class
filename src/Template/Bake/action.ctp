@@ -8,20 +8,20 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-namespace {{namespace}}\Controller\{{controller}};
+namespace <%= $namespace %>\Controller<%= $prefix %>\<%= $controller %>;
 
 use HavokInspiration\ActionsClass\Controller\Action;
 
 /**
- * {{controller}} Controller
- * {{name}} Action
+ * <%= $controller %> Controller
+ * <%= $action %> Action
  *
- * @package {{namespace}}\Controller
+ * @package <%= $namespace %>\Controller
  */
-class {{name}}Action extends Action
+class <%= $action %>Action extends Action
 {
 	/**
-	 * It's like {{controller}}Controller::{{name}} method
+	 * It's like <%= $controller %>Controller::<%= $action %> method
 	 */
 	public function execute()
 	{

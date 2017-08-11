@@ -13,19 +13,19 @@ namespace App\Test\TestCase\Controller;
 use Cake\TestSuite\IntegrationTestCase;
 
 /**
- * {{controller}} Controller
- * {{name}} Action
+ * <%= $controller %> Controller
+ * <%= $action %> Action
  *
- * @package {{namespace}}\Controller
+ * @package <%= $namespace %>\Controller
  */
-class {{name}}ActionTest extends IntegrationTestCase
+class <%= $action %>ActionTest extends IntegrationTestCase
 {
 	/**
-	 * TestCase for \{{namespace}}\Controller\{{controller}}\{{name}}Action
+	 * TestCase for \<%= $namespace %>\Controller\<%= $controller %>\<%= $action %>Action
 	 */
-    public function test{{name}}Action()
+    public function test<%= $action %>Action()
     {
-        $this->get('/{{controller.lower}}');
+        $this->get('/<%= strtolower($controller) %>');
         $this->assertResponseOk();
     }
 }
