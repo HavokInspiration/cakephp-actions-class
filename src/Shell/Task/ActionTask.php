@@ -3,22 +3,22 @@
 namespace HavokInspiration\ActionsClass\Shell\Task;
 
 use Cake\Console\Shell;
-use Bake\Shell\Task\SimpleBakeTask;
 use Cake\Core\Configure;
+use Bake\Shell\Task\SimpleBakeTask;
 
 /**
  * Command line to create HavokInspiration\ActionsClass action file
  */
 class ActionTask extends SimpleBakeTask
 {
-	/**
+    /**
      * Tasks to be loaded by this Task
      *
      * @var array
      */
-	public $tasks = [
-		'Bake.BakeTemplate'
-	];
+    public $tasks = [
+        'Bake.BakeTemplate'
+    ];
 
     /**
      * {@inheritDoc}
@@ -52,22 +52,22 @@ class ActionTask extends SimpleBakeTask
      */
     public function bake($name)
     {
-    	$this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
+        $this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
 
-    	if (strpos($name, '/') !== false) {
-	    	list($controller, $action) = explode('/', $name);
-    	} else {
-    		$controller = $name;
-    		$action = 'index';
-    	}
-		$controller = $this->_camelize($controller);
-		$action = $this->_camelize($action);
+        if (strpos($name, '/') !== false) {
+            list($controller, $action) = explode('/', $name);
+        } else {
+            $controller = $name;
+            $action = 'index';
+        }
+        $controller = $this->_camelize($controller);
+        $action = $this->_camelize($action);
 
         $path = APP . 'Controller';
         $namespace = Configure::read('App.namespace');
 
-    	$prefix = $this->_getPrefix();
-    	if ($prefix) {
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
             $path .= DS . $prefix;
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
@@ -78,10 +78,10 @@ class ActionTask extends SimpleBakeTask
         }
 
         $data = [
-	        'action' 		=> $action,
-	        'controller' 	=> $controller,
-        	'namespace' 	=> $namespace,
-            'prefix'        => $prefix
+            'action' => $action,
+            'controller' => $controller,
+            'namespace' => $namespace,
+            'prefix' => $prefix
         ];
 
         $this->BakeTemplate->set($data);
