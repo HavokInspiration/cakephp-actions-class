@@ -3,8 +3,8 @@
 namespace HavokInspiration\ActionsClass\Shell\Task;
 
 use Cake\Console\Shell;
-use Cake\Core\Configure;
 use Bake\Shell\Task\SimpleBakeTask;
+use Cake\Core\Configure;
 
 /**
  * Command line to create HavokInspiration\ActionsClass action file
@@ -25,7 +25,7 @@ class ActionTask extends SimpleBakeTask
      */
     public function name()
     {
-        return 'file for HavokInspiration/ActionsClass';
+        return 'file for action';
     }
 
     /**
@@ -54,14 +54,7 @@ class ActionTask extends SimpleBakeTask
     {
         $this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
 
-        if (strpos($name, '/') !== false) {
-            list($controller, $action) = explode('/', $name);
-        } else {
-            $controller = $name;
-            $action = 'index';
-        }
-        $controller = $this->_camelize($controller);
-        $action = $this->_camelize($action);
+        list($controller, $action) = $this->setName($name);
 
         $path = APP . 'Controller';
         $namespace = Configure::read('App.namespace');
@@ -73,7 +66,7 @@ class ActionTask extends SimpleBakeTask
         }
 
         if ($this->plugin) {
-            $path = $this->getPath(). 'Controller';
+            $path = $this->getPath() . 'Controller';
             $namespace = $this->_pluginNamespace($this->plugin);
         }
 
@@ -87,9 +80,7 @@ class ActionTask extends SimpleBakeTask
         $this->BakeTemplate->set($data);
 
         $filename = $path . DS . $controller . DS . $action . 'Action.php';
-
         $this->_createActionFile($filename);
-        $this->_createTestFile(TESTS . 'TestCase' . DS . 'Controller' . DS . $controller . DS . $action . 'Action.php');
     }
 
     /**
@@ -102,12 +93,76 @@ class ActionTask extends SimpleBakeTask
         $parser = parent::getOptionParser();
         $name = $this->name();
         $parser->setDescription(
-            sprintf('Bake a %s.', $name)
+            'Bake an Action class'
         )->addOption('prefix', [
             'help' => 'The namespace/routing prefix to use.'
         ]);
 
         return $parser;
+    }
+
+
+    /**
+     * Assembles and writes a unit test file
+     *
+     * @param string $name Name parameter
+     * @return string|null Baked test
+     */
+    public function bakeTest($name)
+    {
+        if (!empty($this->params['no-test'])) {
+            return null;
+        }
+
+        list($controller, $action) = $this->setName($name);
+        $namespace = Configure::read('App.namespace');
+        $path = TESTS . 'TestCase' . DS . 'Controller';
+
+        $plugin = $this->plugin;
+        if ($plugin) {
+            $path = $this->getPath() . 'Controller';
+            $namespace = $this->_pluginNamespace($this->plugin);
+        }
+
+        $prefix = $this->_getPrefix();
+        if ($prefix) {
+            $path .= DS . $prefix;
+            $prefix = '\\' . str_replace('/', '\\', $prefix);
+        }
+
+        $data = [
+            'action' => $action,
+            'controller' => $controller,
+            'namespace' => $namespace,
+            'prefix' => $prefix
+        ];
+
+        $this->BakeTemplate->set($data);
+        
+        $path .= DS . $controller . DS . $action . 'ActionTest.php';
+        $this->_createTestFile($path);
+
+        return true;
+    }
+
+    /**
+     * Transform the name parameter into Controller & Action name
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function setName($name)
+    {
+        if (strpos($name, '/') !== false) {
+            list($controller, $action) = explode('/', $name);
+        } else {
+            $controller = $name;
+            $action = 'index';
+        }
+        $controller = $this->_camelize($controller);
+        $action = $this->_camelize($action);
+
+        return [$controller, $action];
     }
 
     /**
