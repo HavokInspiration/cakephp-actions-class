@@ -12,6 +12,11 @@ use Cake\Core\Configure;
 class ActionTask extends SimpleBakeTask
 {
     /**
+     * {@inheritDoc}
+     */
+    public $pathFragment = '';
+
+    /**
      * Tasks to be loaded by this Task
      *
      * @var array
@@ -45,48 +50,32 @@ class ActionTask extends SimpleBakeTask
     }
 
     /**
-     * Generate a class stub
-     *
-     * @param string $name The classname to generate.
-     * @return string
+     * {@inheritDoc}
      */
     public function bake($name)
     {
         $this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
 
-        list($controller, $action) = $this->setName($name);
+        $path = APP;
 
-        $path = APP . 'Controller';
-        $namespace = Configure::read('App.namespace');
-
-        $prefix = $this->_getPrefix();
-        if ($prefix) {
-            $path .= DS . $prefix;
-            $prefix = '\\' . str_replace('/', '\\', $prefix);
-        }
-
-        if ($this->plugin) {
-            $path = $this->getPath() . 'Controller';
-            $namespace = $this->_pluginNamespace($this->plugin);
-        }
-
-        $data = [
-            'action' => $action,
-            'controller' => $controller,
-            'namespace' => $namespace,
-            'prefix' => $prefix
-        ];
-
-        $this->BakeTemplate->set($data);
-
-        $filename = $path . DS . $controller . DS . $action . 'Action.php';
-        $this->_createActionFile($filename);
+        return $this->bakeAction($name, $path);
     }
 
     /**
-     * Gets the option parser instance and configures it.
-     *
-     * @return \Cake\Console\ConsoleOptionParser
+     * {@inheritDoc}
+     */
+    public function bakeTest($name)
+    {
+        if (!empty($this->params['no-test'])) {
+            return null;
+        }
+        $path = TESTS . 'TestCase' . DS;
+
+        return $this->bakeAction($name, $path, 'Test');
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getOptionParser()
     {
@@ -101,28 +90,30 @@ class ActionTask extends SimpleBakeTask
         return $parser;
     }
 
-
     /**
-     * Assembles and writes a unit test file
+     * Do the bake action with the parameters in command line
      *
-     * @param string $name Name parameter
-     * @return string|null Baked test
+     * @param string $name The name of the action
+     * @param string $path Where the file will be create
+     * @param string $type if is Test or other
+     *
+     * @return bool
      */
-    public function bakeTest($name)
+    protected function bakeAction($name, $path, $type = '')
     {
-        if (!empty($this->params['no-test'])) {
-            return null;
-        }
-
         list($controller, $action) = $this->setName($name);
+
         $namespace = Configure::read('App.namespace');
-        $path = TESTS . 'TestCase' . DS . 'Controller';
 
         $plugin = $this->plugin;
         if ($plugin) {
-            $path = $this->getPath() . 'Controller';
+            $path = $this->_pluginPath($plugin) . 'src' . DS;
+            if ($type == 'Test') {
+                $path = $this->_pluginPath($plugin) . 'tests' . DS . 'TestCase' . DS;
+            }
             $namespace = $this->_pluginNamespace($this->plugin);
         }
+        $path .= 'Controller';
 
         $prefix = $this->_getPrefix();
         if ($prefix) {
@@ -138,9 +129,13 @@ class ActionTask extends SimpleBakeTask
         ];
 
         $this->BakeTemplate->set($data);
-        
-        $path .= DS . $controller . DS . $action . 'ActionTest.php';
-        $this->_createTestFile($path);
+        $filename = $path . DS . $controller . DS . $action . 'Action' . $type . '.php';
+
+        if ($type == 'Test') {
+            $this->createTestFile($filename);
+        } else {
+            $this->createActionFile($filename);
+        }
 
         return true;
     }
@@ -170,7 +165,7 @@ class ActionTask extends SimpleBakeTask
      *
      * @param string $filename The filename path to create file
      */
-    protected function _createActionFile($filename)
+    protected function createActionFile($filename)
     {
         $contents = $this->BakeTemplate->generate($this->template());
         $this->createFile($filename, $contents);
@@ -181,7 +176,7 @@ class ActionTask extends SimpleBakeTask
      *
      * @param string $filename The filename path to create file
      */
-    protected function _createTestFile($filename)
+    protected function createTestFile($filename)
     {
         $contents = $this->BakeTemplate->generate('HavokInspiration/ActionsClass.tests');
         $this->createFile($filename, $contents);
