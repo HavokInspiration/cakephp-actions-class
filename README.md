@@ -119,6 +119,46 @@ src/
 
 Your `Action` classes are only expected to hold an `execute()` method. It can receive passed parameters as in regular controller actions (meaning the URL `/posts/edit/5` will pass `5` to the argument `$id` in the `execute()` method of the `EditAction` class in our previous example).
 
+#### Using the `bake` command-line to create Action classes
+
+You first need to load the plugin in your **config/bootstrap_cli.php** :
+ 
+```php
+Plugin::load('HavokInspiration/ActionsClass');
+```
+
+You can then create an Action class file with the following command :
+
+```
+bin/cake bake action Posts/Index
+```
+
+The command expects the name to get the controller name and the action name separated by a forward slash. For instance, the above example would create a `IndexAction` file for the `Posts` controller. 
+
+You can also specify the routing prefix your controller action lives under by using the `--prefix` option :
+ 
+```
+bin/cake bake action Posts/Index --prefix Admin
+```
+
+If you want to create an action file for a plugin, you can use the `--plugin` option :
+
+```
+bin/cake bake action Posts/Index --plugin MyPlugin
+```
+
+You can of course use both together :
+
+```
+bin/cake bake action Posts/Index --plugin MyPlugin --prefix Admin
+```
+
+By default, baking an action class will generate the corresponding test file. You can skip the test file generation by using the `--no-test` boolean flag :
+
+```
+bin/cake bake action Posts/Index --no-test
+```
+
 ## Compatibility
 
 This plugin was designed to have a maximum compatibility with the regular CakePHP behavior.
