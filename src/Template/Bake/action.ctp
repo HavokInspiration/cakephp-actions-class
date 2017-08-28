@@ -18,7 +18,7 @@ class <%= $action %>Action extends Action
      * @return void|\Cake\Network\Response
      */
     public function execute()
-{
+    {
 
-}
+    }
 }

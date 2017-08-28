@@ -9,6 +9,9 @@
  * @link          http://github.com/HavokInspiration/cakephp-actions-class
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
+
 $findRoot = function ($root) {
     do {
         $lastRoot = $root;
@@ -22,12 +25,22 @@ $findRoot = function ($root) {
 };
 $root = $findRoot(__FILE__);
 unset($findRoot);
-
 chdir($root);
 
-if (file_exists($root . '/config/bootstrap.php')) {
-    require $root . '/config/bootstrap.php';
+define('CORE_PATH', $root . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
+define('ROOT', $root . DS . 'tests' . DS . 'test_app');
+define('APP', ROOT . DS . 'App' . DS);
+define('TESTS', ROOT . DS . 'tests' . DS);
+define('TMP', sys_get_temp_dir() . DS);
 
-    return;
-}
-require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
+Configure::write('App', [
+    'namespace' => 'App',
+    'paths' => [
+        'plugins' => [APP . 'Plugin' . DS],
+        'templates' => [APP . 'Template' . DS]
+    ]
+]);
+
+Plugin::load('HavokInspiration/ActionsClass', [
+    'path' => dirname(dirname(__FILE__)) . DS,
+]);

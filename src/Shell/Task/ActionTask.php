@@ -108,7 +108,7 @@ class ActionTask extends SimpleBakeTask
 
         $out = $this->bakeAction($action, $data);
 
-        if ($this->params['no-test'] !== true) {
+        if (!isset($this->params['no-test']) || $this->params['no-test'] !== true) {
             $this->bakeActionTest($action, $data);
         }
 
