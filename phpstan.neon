@@ -1,0 +1,5 @@
+services:
+    -
+        class: HavokInspiration\ActionsClass\PHPStan\ShellPropertiesClassReflectionExtension
+        tags:
+            - phpstan.broker.propertiesClassReflectionExtension

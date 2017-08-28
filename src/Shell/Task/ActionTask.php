@@ -82,7 +82,7 @@ class ActionTask extends SimpleBakeTask
         if (strpos($name, '/') === false) {
             $this->err('You must pass a Controller name for your action in the format `ControllerName/ActionName`');
 
-            return Shell::CODE_ERROR;
+            return (string)Shell::CODE_ERROR;
         }
 
         $this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
