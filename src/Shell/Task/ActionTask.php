@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * Copyright (c) Yves Piquel (http://www.havokinspiration.fr)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Yves Piquel (http://www.havokinspiration.fr)
+ * @link          http://github.com/HavokInspiration/cakephp-actions-class
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+declare(strict_types=1);
 namespace HavokInspiration\ActionsClass\Shell\Task;
 
 use Cake\Console\Shell;
@@ -14,7 +24,7 @@ class ActionTask extends SimpleBakeTask
     /**
      * {@inheritDoc}
      */
-    public $pathFragment = '';
+    public $pathFragment = 'Controller/';
 
     /**
      * Tasks to be loaded by this Task
@@ -22,7 +32,8 @@ class ActionTask extends SimpleBakeTask
      * @var array
      */
     public $tasks = [
-        'Bake.BakeTemplate'
+        'Bake.BakeTemplate',
+        'Bake.Test'
     ];
 
     /**
@@ -30,15 +41,21 @@ class ActionTask extends SimpleBakeTask
      */
     public function name()
     {
-        return 'file for action';
+        return 'action';
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fileName($name)
+    public function fileName($name, $test = false)
     {
-        return $name . '.php';
+        $fileName = $name . 'Action';
+        if ($test) {
+            $fileName .= 'Test';
+        }
+        $fileName .= '.php';
+
+        return $fileName;
     }
 
     /**
@@ -52,72 +69,33 @@ class ActionTask extends SimpleBakeTask
     /**
      * {@inheritDoc}
      */
+    public function templateTest()
+    {
+        return 'HavokInspiration/ActionsClass.test';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function bake($name)
     {
+        if (strpos($name, '/') === false) {
+            $this->err('You must pass a Controller name for your action in the format `ControllerName/ActionName`');
+
+            return Shell::CODE_ERROR;
+        }
+
         $this->out("\n" . sprintf('Baking action class for %s...', $name), 1, Shell::QUIET);
 
-        $path = APP;
-
-        return $this->bakeAction($name, $path);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function bakeTest($name)
-    {
-        if (!empty($this->params['no-test'])) {
-            return null;
-        }
-        $path = TESTS . 'TestCase' . DS;
-
-        return $this->bakeAction($name, $path, 'Test');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOptionParser()
-    {
-        $parser = parent::getOptionParser();
-        $name = $this->name();
-        $parser->setDescription(
-            'Bake an Action class'
-        )->addOption('prefix', [
-            'help' => 'The namespace/routing prefix to use.'
-        ]);
-
-        return $parser;
-    }
-
-    /**
-     * Do the bake action with the parameters in command line
-     *
-     * @param string $name The name of the action
-     * @param string $path Where the file will be create
-     * @param string $type if is Test or other
-     *
-     * @return bool
-     */
-    protected function bakeAction($name, $path, $type = '')
-    {
-        list($controller, $action) = $this->setName($name);
+        list($controller, $action) = $this->getName($name);
 
         $namespace = Configure::read('App.namespace');
-
-        $plugin = $this->plugin;
-        if ($plugin) {
-            $path = $this->_pluginPath($plugin) . 'src' . DS;
-            if ($type == 'Test') {
-                $path = $this->_pluginPath($plugin) . 'tests' . DS . 'TestCase' . DS;
-            }
+        if ($this->plugin) {
             $namespace = $this->_pluginNamespace($this->plugin);
         }
-        $path .= 'Controller';
 
         $prefix = $this->_getPrefix();
         if ($prefix) {
-            $path .= DS . $prefix;
             $prefix = '\\' . str_replace('/', '\\', $prefix);
         }
 
@@ -128,32 +106,81 @@ class ActionTask extends SimpleBakeTask
             'prefix' => $prefix
         ];
 
-        $this->BakeTemplate->set($data);
-        $filename = $path . DS . $controller . DS . $action . 'Action' . $type . '.php';
+        $out = $this->bakeAction($action, $data);
 
-        if ($type == 'Test') {
-            $this->createTestFile($filename);
-        } else {
-            $this->createActionFile($filename);
+        if ($this->params['no-test'] !== true) {
+            $this->bakeActionTest($action, $data);
         }
 
-        return true;
+        return $out;
     }
 
     /**
-     * Transform the name parameter into Controller & Action name
+     * Generate the action code
      *
-     * @param string $name
-     * @return array
+     * @param string $actionName The name of the action.
+     * @param array $data The data to turn into code.
+     * @return string The generated action file.
      */
-    protected function setName($name)
+    public function bakeAction($actionName, array $data)
     {
-        if (strpos($name, '/') !== false) {
-            list($controller, $action) = explode('/', $name);
-        } else {
-            $controller = $name;
-            $action = 'index';
+        $data += [
+            'namespace' => null,
+            'controller' => null,
+            'prefix' => null,
+            'actions' => null,
+        ];
+        $this->BakeTemplate->set($data);
+        $contents = $this->BakeTemplate->generate($this->template());
+        $path = $this->getPath();
+        $filename = $path . $data['controller'] . DS . $this->fileName($actionName);
+        $this->createFile($filename, $contents);
+
+        return $contents;
+    }
+
+    /**
+     * Assembles and writes a unit test file
+     *
+     * @param string $className Controller class name
+     * @return string|null Baked test
+     */
+    public function bakeActionTest($actionName, $data)
+    {
+        $data += [
+            'namespace' => null,
+            'controller' => null,
+            'prefix' => null,
+            'actions' => null,
+        ];
+        $this->Test->plugin = $this->plugin;
+        $this->BakeTemplate->set($data);
+
+        $prefix = $this->_getPrefix();
+        $contents = $this->BakeTemplate->generate($this->templateTest());
+
+        $path = $this->Test->getPath() . 'Controller' . DS;
+        if ($prefix) {
+            $path .= $prefix . DS;
         }
+        $path .= $data['controller'];
+
+        $filename = $path . DS . $this->fileName($actionName, true);
+        $this->createFile($filename, $contents);
+
+        return $contents;
+    }
+
+    /**
+     * Transform the name parameter into Controller & Action name.
+     *
+     * @param string $name Name passed to the CLI.
+     * @return array First key is the controller name, second key the action name.
+     */
+    protected function getName($name)
+    {
+        list($controller, $action) = explode('/', $name);
+
         $controller = $this->_camelize($controller);
         $action = $this->_camelize($action);
 
@@ -161,24 +188,24 @@ class ActionTask extends SimpleBakeTask
     }
 
     /**
-     * Create Controller Action file
-     *
-     * @param string $filename The filename path to create file
+     * {@inheritDoc}
      */
-    protected function createActionFile($filename)
+    public function getOptionParser()
     {
-        $contents = $this->BakeTemplate->generate($this->template());
-        $this->createFile($filename, $contents);
-    }
+        $parser = parent::getOptionParser();
 
-    /**
-     * Create TestCase file
-     *
-     * @param string $filename The filename path to create file
-     */
-    protected function createTestFile($filename)
-    {
-        $contents = $this->BakeTemplate->generate('HavokInspiration/ActionsClass.tests');
-        $this->createFile($filename, $contents);
+        $parser
+            ->setDescription(
+                'Bake an Action class file skeleton'
+            )
+            ->addOption('prefix', [
+                'help' => 'The namespace/routing prefix to use.'
+            ])
+            ->addOption('no-test', [
+                'boolean' => true,
+                'help' => 'Do not generate a test skeleton.'
+            ]);
+
+        return $parser;
     }
 }
