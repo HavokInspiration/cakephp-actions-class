@@ -72,6 +72,22 @@ class ActionTaskTest extends TestCase
     }
 
     /**
+     * Test the main method with a wrong name passed (does not follow the ControllerName/ActionName pattern).
+     *
+     * @return void
+     */
+    public function testWrongName()
+    {
+        $this->Task->expects($this->once())
+            ->method('err')
+            ->with(
+                'You must pass a Controller name for your action in the format `ControllerName/ActionName`'
+            );
+
+        $this->Task->main('Posts');
+    }
+
+    /**
      * Test the main method.
      *
      * @return void
