@@ -54,6 +54,7 @@ class ActionFactoryTest extends TestCase
         $this->assertInstanceOf('TestApp\Controller\Cakes\IndexAction', $result);
         $this->assertEquals('Index', $result->name);
         $this->assertEquals('Cakes', $result->getControllerName());
+        $this->assertEquals('Cakes', $result->modelClass);
         $this->assertSame($request, $result->request);
         $this->assertSame($this->response, $result->response);
     }

@@ -52,6 +52,7 @@ abstract class Action extends Controller
     public function setControllerName(string $controllerName) : Action
     {
         $this->controllerName = $controllerName;
+        $this->modelClass = $controllerName;
 
         return $this;
     }
